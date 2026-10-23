@@ -1,0 +1,51 @@
+# Genie User Churn Analysis - Declarative Automation Bundle
+# Deploys: a daily job (ingest Genie telemetry -> gold churn tables) and a Databricks App over the gold tables.
+bundle:
+  name: genie_user_churn_analysis
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Catalog that holds the churn analysis schema
+    default: main
+  schema:
+    description: Schema for raw_* and gold_* tables
+    default: genie_churn
+  warehouse_id:
+    description: SQL warehouse used by the app
+    lookup:
+      warehouse: Serverless Starter Warehouse
+  data_mode:
+    description: "'production' reads system.access.audit and the Genie API; 'synthetic' generates demo data"
+    default: production
+  lookback_days:
+    description: Days of Genie history to ingest
+    default: "180"
+  churn_days:
+    description: No questions for more than this many days = churned
+    default: "30"
+  at_risk_days:
+    description: No questions for more than this many days (and <= churn_days) = at risk
+    default: "14"
+  include_conversation_text:
+    description: "'true' pulls question/answer text via the Genie API (needs CAN MANAGE on spaces); 'false' = audit metadata only"
+    default: "true"
+
+targets:
+  dev:
+    default: true
+    mode: development
+    variables:
+      catalog: serverless_stable_qr9if1_catalog
+      schema: genie_churn_dev
+      data_mode: synthetic
+
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      schema: genie_churn
+      data_mode: production

@@ -1,0 +1,11 @@
+command:
+  - python
+  - app.py
+
+env:
+  - name: DATABRICKS_WAREHOUSE_ID
+    value: d94339f8fe9c593a
+  - name: DATABRICKS_CATALOG
+    value: main
+  - name: DATABRICKS_SCHEMA
+    value: genie_churn
