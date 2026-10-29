@@ -106,6 +106,3 @@ Genie API ────────────┘                               
 * Question text and Genie responses are customer data. The `include_conversation_text` parameter lets you skip API ingestion if not permitted.
 * The `user_attributes_table` parameter enriches users with department/role from an HR or identity table without hard-coding the source.
 
-## License
-
-MIT
